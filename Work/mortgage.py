@@ -24,7 +24,8 @@ while principal > 0:
         principal, paid = principal_paid(principal, payment)
     
     total_paid = total_paid + paid
-    print(month, round(total_paid,2), round(principal,2))
+    print(f'{month:10d} | {total_paid: 12.2f} | {principal: 12.2f}')
+#    print(month, round(total_paid,2), round(principal,2))
     month = month + 1
 
 
