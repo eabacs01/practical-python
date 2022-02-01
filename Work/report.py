@@ -1,31 +1,30 @@
 # report.py
 #
-# Exercise 2.5
+from cmath import pi
 import csv
 def read_portfolio(filename):
+    '''
+    Read in a portfolio from a csv file
+    Input: filename of csv file with headers in first row 
+    Output: List of dictionaries of holdings in the portfolio
+            Every holding has least these enties: name, shares & price
+    '''
     f = open(filename)
     rows = csv.reader(f)
     headers = next(rows)
     portfolio = []
     for row in rows:
-        # holding={}
-        # holding['name'] = row[0]
-        # holding['shares'] = int(row[1])
-        # holding['price'] = float(row[2])
-        # Exercise 2.16
         holding = dict(zip(headers,row))
         holding['shares'] = int(holding['shares'])
         holding['price'] = float(holding['price'])
         portfolio.append(holding) 
     return portfolio
 
-p = read_portfolio('Data\portfolio.csv')
-port_value0 = sum([s['shares'] * s['price'] for s in p])
-print(p)
-print(port_value0)
-
-# Exercise 2.6
 def read_prices(filename):
+    '''
+    Read prices from a csv file
+    Input: CSV filename, no headers, just two fields per line: name and price
+    '''
     f =  open(filename, 'r')
     rows = csv.reader(f)
     prices={}
@@ -36,23 +35,18 @@ def read_prices(filename):
             pass
     return prices
 
-prices = read_prices('Data\prices.csv')
-# Exercise 2.7
-port_value1 = sum([s['shares'] * prices[s['name']] for s in p])
-print(prices)
-print(port_value1)
-print(f'Opening portfolio value: {port_value0:>10.2f}, current value: {port_value1:>10.2f}, gain/loss: {(port_value1 - port_value0):>10.2f}')
-
-#Exercise 2.9
 def make_report(portfolio, prices):
+    '''
+    Takes a portfolio and prices file and produces a rpeort of the holdings with the original price and gain/loss in price
+    '''
     report=[]
     for holding in portfolio:
         report_line = holding['name'], holding['shares'], prices[holding['name']], prices[holding['name']] - holding['price']
         report.append(report_line) 
     return report
 
-#Exercise 2.10, 2.11 & 2.12
-def format_report(report):
+def print_report(report):
+    '''Print out the report in nice format'''
     headers = ('Name', 'Shares', 'Price', 'Change')
     print(f'{headers[0]:>10s} {headers[1]:>10s} {headers[2]:>10s} {headers[3]:>10s}')
     print('---------- ' * 4)
@@ -60,3 +54,12 @@ def format_report(report):
         strprice = f'${price:.2f}'
         print(f'{name:>10} {shares: >10d} {strprice: >10s} {change: >10.2f}')
 
+def portfolio_report(portfname, pricefname):
+    '''Read in a ortfolio file and prices file and produce a report & print it'''
+    portfolio = read_portfolio(portfname)
+    prices = read_prices(pricefname)
+    report = make_report(portfolio, prices)
+    print_report(report)
+    return report
+    
+    
