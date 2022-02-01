@@ -8,10 +8,14 @@ def read_portfolio(filename):
     headers = next(rows)
     portfolio = []
     for row in rows:
-        holding={}
-        holding['name'] = row[0]
-        holding['shares'] = int(row[1])
-        holding['price'] = float(row[2])
+        # holding={}
+        # holding['name'] = row[0]
+        # holding['shares'] = int(row[1])
+        # holding['price'] = float(row[2])
+        # Exercise 2.16
+        holding = dict(zip(headers,row))
+        holding['shares'] = int(holding['shares'])
+        holding['price'] = float(holding['price'])
         portfolio.append(holding) 
     return portfolio
 

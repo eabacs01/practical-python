@@ -10,22 +10,44 @@
 #             total_cost += int(numshares) * float(price)
 #     return total_cost
 
-import sys # ex 1.33
-# Exercise 1.32
+# import sys # ex 1.33
+# # Exercise 1.32
+# import csv
+# def portfolio_cost(filename):
+#     f = open(filename)
+#     rows = csv.reader(f)
+#     headers = next(rows)
+#     total_cost = 0
+#     for rownum, row in enumerate(rows):
+#         # Exercise 2.15 - try/except block
+#         try:
+#             total_cost += int(row[1]) * float(row[2])
+#         except ValueError:
+#             print(f'Row {rownum}: couldn\'t convert: {row}')
+#     return total_cost
+
+# if len(sys.argv)==2:
+#     filename = sys.argv[1]
+# else:
+#     filename = 'Data\portfolio.csv'
+
+# cost = portfolio_cost(filename)
+# print(f'Total cost: {cost: 10.2f}')
+
+# Exercise 2.16
 import csv
 def portfolio_cost(filename):
     f = open(filename)
     rows = csv.reader(f)
     headers = next(rows)
     total_cost = 0
-    for row in rows:
-        total_cost += int(row[1]) * float(row[2])
+    for rownum, row in enumerate(rows, start=1):
+        holding = dict(zip(headers, row))
+        try:
+            numshares = int(holding['shares'])
+            price = float(holding['price'])
+            total_cost += numshares * price
+        except ValueError:
+            print(f'Row {rownum}: couldn\'t convert: {row}')
     return total_cost
 
-if len(sys.argv)==2:
-    filename = sys.argv[1]
-else:
-    filename = 'Data\portfolio.csv'
-
-cost = portfolio_cost(filename)
-print(f'Total cost: {cost: 10.2f}')
