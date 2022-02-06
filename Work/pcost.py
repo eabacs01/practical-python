@@ -35,19 +35,24 @@
 # print(f'Total cost: {cost: 10.2f}')
 
 # Exercise 2.16
-import csv
-def portfolio_cost(filename):
-    f = open(filename)
-    rows = csv.reader(f)
-    headers = next(rows)
-    total_cost = 0
-    for rownum, row in enumerate(rows, start=1):
-        holding = dict(zip(headers, row))
-        try:
-            numshares = int(holding['shares'])
-            price = float(holding['price'])
-            total_cost += numshares * price
-        except ValueError:
-            print(f'Row {rownum}: couldn\'t convert: {row}')
-    return total_cost
+# import csv
+# def portfolio_cost(filename):
+#     f = open(filename)
+#     rows = csv.reader(f)
+#     headers = next(rows)
+#     total_cost = 0
+#     for rownum, row in enumerate(rows, start=1):
+#         holding = dict(zip(headers, row))
+#         try:
+#             numshares = int(holding['shares'])
+#             price = float(holding['price'])
+#             total_cost += numshares * price
+#         except ValueError:
+#             print(f'Row {rownum}: couldn\'t convert: {row}')
+#     return total_cost
 
+# Exercise 3.14
+import report
+def portfolio_cost(filename):
+    portfolio = report.read_portfolio(filename)
+    return sum([holding['shares'] * holding['price'] for holding in portfolio])

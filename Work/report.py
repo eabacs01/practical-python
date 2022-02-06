@@ -1,7 +1,7 @@
 # report.py
 #
-from cmath import pi
-import csv
+from fileparse import parse_csv
+
 def read_portfolio(filename):
     '''
     Read in a portfolio from a csv file
@@ -9,31 +9,18 @@ def read_portfolio(filename):
     Output: List of dictionaries of holdings in the portfolio
             Every holding has least these enties: name, shares & price
     '''
-    f = open(filename)
-    rows = csv.reader(f)
-    headers = next(rows)
-    portfolio = []
-    for row in rows:
-        holding = dict(zip(headers,row))
-        holding['shares'] = int(holding['shares'])
-        holding['price'] = float(holding['price'])
-        portfolio.append(holding) 
+    portfolio = parse_csv(filename, select=['name', 'shares', 'price'], types=[str, int, float])
     return portfolio
 
 def read_prices(filename):
     '''
     Read prices from a csv file
     Input: CSV filename, no headers, just two fields per line: name and price
+    Output: dict of names and prices
     '''
-    f =  open(filename, 'r')
-    rows = csv.reader(f)
-    prices={}
-    for row in rows:
-        try:
-            prices[row[0]] = float(row[1])
-        except:
-            pass
-    return prices
+    # read in prices and get list of tuples
+    prices = parse_csv(filename, types = [str, float], has_headers=False)
+    return dict(prices)
 
 def make_report(portfolio, prices):
     '''
