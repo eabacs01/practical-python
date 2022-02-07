@@ -1,5 +1,6 @@
 # report.py
 #
+import sys
 from fileparse import parse_csv
 
 def read_portfolio(filename):
@@ -47,6 +48,16 @@ def portfolio_report(portfname, pricefname):
     prices = read_prices(pricefname)
     report = make_report(portfolio, prices)
     print_report(report)
-    return report
-    
-    
+    # return report
+
+# Exercise 3.15
+def main(args):
+    if len(args) != 3:
+        raise SystemExit(f'Usage: {args[0]} ' 'portfile pricefile')
+    portfile = args[1]
+    pricefile = args[2]
+    portfolio_report(portfile, pricefile)
+
+# Run main from the command line prompt
+if __name__ == '__main__':
+    main(sys.argv)

@@ -52,7 +52,18 @@
 #     return total_cost
 
 # Exercise 3.14
+import sys
 import report
+
 def portfolio_cost(filename):
     portfolio = report.read_portfolio(filename)
     return sum([holding['shares'] * holding['price'] for holding in portfolio])
+
+def main(args):
+    if len(args) != 2:
+        raise SystemExit(f'Usage: {args[0]} ' 'portfile')
+    print(f'Total cost: {portfolio_cost(args[1]):10.2f}')
+
+# Run main from the command line prompt
+if __name__ == '__main__':
+    main(sys.argv)
