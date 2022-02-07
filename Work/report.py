@@ -10,7 +10,8 @@ def read_portfolio(filename):
     Output: List of dictionaries of holdings in the portfolio
             Every holding has least these enties: name, shares & price
     '''
-    portfolio = parse_csv(filename, select=['name', 'shares', 'price'], types=[str, int, float])
+    with open(filename, 'rt') as f:
+        portfolio = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float])
     return portfolio
 
 def read_prices(filename):
@@ -20,7 +21,8 @@ def read_prices(filename):
     Output: dict of names and prices
     '''
     # read in prices and get list of tuples
-    prices = parse_csv(filename, types = [str, float], has_headers=False)
+    with open(filename, 'rt') as f:
+        prices = parse_csv(f, types = [str, float], has_headers=False)
     return dict(prices)
 
 def make_report(portfolio, prices):
