@@ -2,6 +2,8 @@
 #
 import sys
 from fileparse import parse_csv
+from stock import Stock
+from tableformat import create_formatter 
 
 def read_portfolio(filename):
     '''
@@ -11,8 +13,8 @@ def read_portfolio(filename):
             Every holding has least these enties: name, shares & price
     '''
     with open(filename, 'rt') as f:
-        portfolio = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float])
-    return portfolio
+        portdicts = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float])
+    return [Stock(s['name'], s['shares'], s['price']) for s in portdicts]
 
 def read_prices(filename):
     '''
@@ -31,34 +33,37 @@ def make_report(portfolio, prices):
     '''
     report=[]
     for holding in portfolio:
-        report_line = holding['name'], holding['shares'], prices[holding['name']], prices[holding['name']] - holding['price']
+        report_line = holding.name, holding.shares, prices[holding.name], prices[holding.name] - holding.price
         report.append(report_line) 
     return report
 
-def print_report(report):
-    '''Print out the report in nice format'''
-    headers = ('Name', 'Shares', 'Price', 'Change')
-    print(f'{headers[0]:>10s} {headers[1]:>10s} {headers[2]:>10s} {headers[3]:>10s}')
-    print('---------- ' * 4)
-    for name, shares, price, change in report:
-        strprice = f'${price:.2f}'
-        print(f'{name:>10} {shares: >10d} {strprice: >10s} {change: >10.2f}')
+def print_report(reportdata, formatter):
+    '''
+    Print out a formatted report from list of (name, shares, price, price change) tuples
+    '''
+    formatter.headings(['Name', 'Shares', 'Price', 'Change'])
+    for name, shares, price, change in reportdata:
+        rowdata = [ name, str(shares), f'{price:0.2f}', f'{change:0.2f}' ] 
+        formatter.row(rowdata)
 
-def portfolio_report(portfname, pricefname):
-    '''Read in a ortfolio file and prices file and produce a report & print it'''
+def portfolio_report(portfname, pricefname, fmt='txt'):
+    '''Read in a portfolio file and prices file and produce a report & print it'''
     portfolio = read_portfolio(portfname)
     prices = read_prices(pricefname)
     report = make_report(portfolio, prices)
-    print_report(report)
+    #Print out report
+    formatter = create_formatter(fmt)
+    print_report(report, formatter)
     # return report
 
 # Exercise 3.15
 def main(args):
-    if len(args) != 3:
+    if len(args) != 4:
         raise SystemExit(f'Usage: {args[0]} ' 'portfile pricefile')
     portfile = args[1]
     pricefile = args[2]
-    portfolio_report(portfile, pricefile)
+    fmt = args[3]
+    portfolio_report(portfile, pricefile, fmt)
 
 # Run main from the command line prompt
 if __name__ == '__main__':
