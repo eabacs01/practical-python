@@ -2,7 +2,6 @@
 #
 
 # Exercise 4.5
-
 class TableFormatter:
     def headings(self, headers):
         '''
@@ -51,6 +50,10 @@ class HTMLTableFormatter(TableFormatter):
     def row(self, rowdata):
         print('<tr><td>' + '</td><td>'.join(rowdata) + '</td></tr>')
         
+#Exercise 4.11
+class FormatError(Exception):
+    pass
+
 #Exercise 4.7
 def create_formatter(fmt):
     if fmt == 'txt':
@@ -60,5 +63,19 @@ def create_formatter(fmt):
     elif fmt == 'html':
         return HTMLTableFormatter()
     else:
-        raise RuntimeError(f'Unknown format (for table formatter): {fmt}')
+        raise FormatError(f'Unknown formatter type: {fmt}')
 
+# Exercise 4.10
+def print_table(objlist, select=None, formatter=None):
+    '''
+    Print out table formatted according to selected tableformat type
+    '''
+    if not select:
+        raise ValueError('Usage: select = list of attributes/properties not empty')
+    if not formatter:
+        raise ValueError('Usage: formatter = instance of tableformat class')
+    
+    formatter.headings(select)
+    for obj in objlist:
+        rowdata = [ str(getattr(obj, selitem)) for selitem in select ] 
+        formatter.row(rowdata)
