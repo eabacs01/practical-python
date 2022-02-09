@@ -13,13 +13,10 @@ def convert_types(rows, types):
         yield [ func(val) for func, val in zip(types, row) ]
 
 def make_dicts(rows, headers):
-    for row in rows:
-        yield dict(zip(headers, row))
+    return (dict(zip(headers, row)) for row in rows)
 
 def filter_symbols(rows, names):
-    for row in rows:
-        if row['name'] in names:
-            yield row
+     return (row for row in rows if row['name'] in names)
 
 def parse_stock_data(lines):
     rows = csv.reader(lines)
@@ -39,13 +36,17 @@ def ticker(portfile, logfile, fmt):
     rows = parse_stock_data(lines)
     rows = filter_symbols(rows, portfolio)
 
-    formatter.headings(['name', 'price', 'change'])
+    formatter.headings(['Name', 'Price', 'Change'])
     for row in rows:
-        rowdata = [ str(row[colname]) for colname in ['name', 'price', 'change'] ] 
+        rowdata = ( str(row[colname]) for colname in ['name', 'price', 'change'] ) 
         formatter.row(rowdata)
 
-if __name__ == '__main__':
-    lines = follow('Data/stocklog.csv')
-    rows = parse_stock_data(lines)
-    for row in rows:
-        print(row)
+    def main(args):
+        if len(args) != 4:
+            raise SystemExit('Usage: %s portfoliofile logfile fmt' % args[0])
+        else:
+            ticker(args[1], args[2], args[3])
+    
+    if __name__ == '__main__':
+        import sys
+        main(sys.argv)
