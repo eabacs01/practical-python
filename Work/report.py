@@ -6,7 +6,7 @@ from stock import Stock
 from tableformat import create_formatter 
 from portfolio import Portfolio
 
-def read_portfolio(filename):
+def read_portfolio(filename, **opts):
     '''
     Read in a portfolio from a csv file
     Input: filename of csv file with headers in first row 
@@ -14,8 +14,8 @@ def read_portfolio(filename):
             Every holding has least these enties: name, shares & price
     '''
     with open(filename, 'rt') as f:
-        portdicts = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float])
-    portfolio = [ Stock(s['name'], s['shares'], s['price']) for s in portdicts ]
+        portdicts = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float], **opts)
+    portfolio = [ Stock(**s) for s in portdicts ]
     return Portfolio(portfolio)
 
 def read_prices(filename):

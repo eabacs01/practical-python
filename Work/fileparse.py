@@ -37,7 +37,8 @@ def parse_csv(lines, select=None, types=None, has_headers = True, delimiter=',',
             except ValueError as v:
                 if not silence_errors:  
                     print(f'Row {rownum}: Couldn\'t convert {row}')
-                    print(f'Row {rownum}: Reason {v}')                        
+                    print(f'Row {rownum}: Reason {v}')
+                continue                        
         
         # make the record and append it
         if headers:
