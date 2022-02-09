@@ -57,7 +57,7 @@ import report
 
 def portfolio_cost(filename):
     portfolio = report.read_portfolio(filename)
-    return sum(holding.cost for holding in portfolio)
+    return portfolio.total_cost
 
 def main(args):
     if len(args) != 2:
