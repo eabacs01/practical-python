@@ -14,9 +14,8 @@ def read_portfolio(filename, **opts):
             Every holding has least these enties: name, shares & price
     '''
     with open(filename, 'rt') as f:
-        portdicts = parse_csv(f, select=['name', 'shares', 'price'], types=[str, int, float], **opts)
-    portfolio = [ Stock(**s) for s in portdicts ]
-    return Portfolio(portfolio)
+        portfolio = Portfolio.from_csv(f)
+    return portfolio
 
 def read_prices(filename):
     '''
