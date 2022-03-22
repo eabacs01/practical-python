@@ -2,6 +2,8 @@
 #
 # Exercise 3.3
 import csv
+import logging
+log = logging.getLogger(__name__)
 
 def parse_csv(lines, select=None, types=None, has_headers = True, delimiter=',', silence_errors = False):
     '''Parse iterable of CSV entries into a list of records/dicts'''
@@ -34,10 +36,10 @@ def parse_csv(lines, select=None, types=None, has_headers = True, delimiter=',',
         if types:
             try:
                 row = [func(val) for func, val in zip(types, row)]
-            except ValueError as v:
-                if not silence_errors:  
-                    print(f'Row {rownum}: Couldn\'t convert {row}')
-                    print(f'Row {rownum}: Reason {v}')
+            except ValueError as e:
+                if not silence_errors:
+                    log.warning('Row %d: Couldn\'t convert %s', rownum, row)
+                    log.debug('Row %d: Reason %s', rownum, e)
                 continue                        
         
         # make the record and append it
