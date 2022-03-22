@@ -53,10 +53,10 @@
 
 # Exercise 3.14
 import sys
-import report
+from porty.report import read_portfolio
 
 def portfolio_cost(filename):
-    portfolio = report.read_portfolio(filename)
+    portfolio = read_portfolio(filename)
     return portfolio.total_cost
 
 def main(args):

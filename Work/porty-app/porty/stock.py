@@ -2,7 +2,7 @@
 #
 #Exercise 4.1 & 7.9
 
-from typedproperty import String, Integer, Float
+from .typedproperty import String, Integer, Float
 
 class Stock:
     
